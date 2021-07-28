@@ -1,0 +1,214 @@
+1) 第22课
+	LinkList.h 代码:
+		template <typename T>
+		typename LinkList<T>::Node* LinkList<T>::position(int pos) {
+		}
+		
+	什么时候需要加上这么复杂的限定词? 规律总结...?
+
+	比如:
+		template <typename T>
+		typename LinkList<T>::Node* create() {
+			return new Node();							// 错误
+			return new typename LinkList<T>::Node();	// 正确
+		}
+	但是:
+		template <typename T>
+		void LinkList<T>::clear() {
+			Node* nd = reinterpret_cast<Node *>(&m_header);
+			Node* pd;
+	
+	这里不是也定义了"Node*",但是编译不出错....
+	
+
+2)	
+	提示警告
+	1) 
+		testListFind()中
+			class Test : public Object {
+				int m_v;
+			public:
+				Test(int v = 0) {
+					m_v = v;
+				}
+
+				bool operator==(const Test& t ) {
+					return (m_v == t.m_v);
+				}
+			};
+			//--------------------------------------
+			LinkList<Test> lt;
+			Test    t1(1);
+			Test    t2(2);
+			Test    t3(3);
+
+			lt.insert(t1);
+			lt.insert(t2);
+			lt.insert(t3);
+
+			cout << lt.find(t3) << endl;
+
+		提示, bool operator==(const Test& t ) { 是没有被使用的成员函数 !!!
+	
+	2) 另一个例子:
+		void testSmartPoint(void) {
+			class TestPoint {
+
+			public:
+				TestPoint() {
+					cout << "TestPoint()" << endl;
+				}
+
+				~TestPoint() {
+					cout << "~TestPoint()" << endl;
+				}
+			};
+
+			SmartPointer<TestPoint> sp = new TestPoint();
+			SmartPointer<TestPoint> nsp = sp;
+			cout << " sp is NULL :" << sp.isNull() << endl;
+			cout << "nsp is NULL :" << nsp.isNull() << endl;
+		}
+		
+		函数中的类的成员变量也是被警告说: warning: unused member function '~TestPoint'
+	
+3) 比如 CircleList.h 中
+		template <typename T>
+		Node* CircleList<T>::last() {
+	会提示 Node 错误
+	修改为:
+		typename LinkList<T>::Node* CircleList<T>::last() {
+	才行
+
+	想运用:
+		typedef typename LinkList<T>::Node Node;		
+	放哪里都有编译问题
+	
+4) 课程中29课第3节的后面可以看到
+	老师仅仅修改 LinkList中的
+			virtual bool move(int i, int step = 1); // 设置游标
+			virtual bool next();                    // 游标下移
+			virtual bool end();                     // 是否到了结尾
+			virtual T    current();                 // 返回当前游标指向的元素的值
+			virtual T    get(int i) const;
+	修改成了虚函数.
+	
+	1) 我觉得应该把 CircleList中的所有重写了的函数,对于
+		LinkLIst来说都应该申明为虚函数,
+	2) 全部申明为虚函数又未尝不可
+
+5) 课程Tree.h中的find函数
+	改成了:
+		virtual bool find(TreeNode<T>* node) const = 0;
+	我觉得用bool更加符合常规.
+	
+6) 课程56课中, tree的remove, 中运用:
+	1) SharedPointer的运用
+		代码:
+			template <typename T>
+			SharedPointer<Tree<T>> GTree<T>::remove(const T& value) {
+				GTree<T>* ret = nullptr;
+				...
+				
+				return ret
+			}
+			
+			上面中代码改为:
+				return SharedPointer<Tree<T>>(ret);
+			对于低级别学员,也许更加直观,更加容易理解!!!???
+		
+		思考: 这里能不能用"SmartPointer"指针呢???
+		回答: 我觉得应该可以.
+		
+	2) 指针的引用
+			protected:
+				...
+				void remove(GTreeNode<T>* node, GTree<T>* &ret);
+		
+		这里的: GTree<T>* &ret, 
+		也就是指针的引用用法, 需要多加揣摩!!!
+		
+		1) 见博客文章
+			https://blog.csdn.net/zyb228/article/details/90040262?utm_medium=distribute.pc_relevant.none-task-blog-title-6&spm=1001.2101.3001.4242
+		2) 根据博客文章,我建立了一个项目进行测试:
+			E:\qt\project\forTest\pointerRef
+		   更加可以加深理解.
+	
+	3) 关于项目中的 remove功能的实现代码中的返回值
+				SharedPointer<Tree<T>> remove(TreeNode<T>* node);
+			注意,这里设计有点技巧,一定要返回指向Tree的智能指针,万万不能返回 
+				指向头结点"GTreeNode<T>"的智能指针
+			
+			当程序结束时,智能指针就会销毁它指向的对象: "Tree"。
+			于是就会调用:
+			"~GTree()" ==> clear() ==> free() ==> 整棵树的节点全部被摧毁
+		
+		
+		思考:
+			如果remove的返回值是智能指针指向"GTreeNode<T>",这是一个节点,不是一棵树.
+			也就是无法触发树的析构函数: ~GTree()
+			要达到自动销毁的目的,那么怎么做呢?
+		
+		方法: 
+			重载 GTreeNode类的delete (已经实现在代码中,但是注释掉了)
+
+			template<typename T>
+			void GTreeNode<T>::operator delete(void *p) {
+				// 将它的子孙后代也统统删除
+				GTreeNode<T>* node = reinterpret_cast<GTreeNode<T> *>(p);
+
+				if ( node->child.length() != 0 ) {
+					for ( node->child.move(0); !node->child.end(); node->child.next() ) {
+						if ( node->child.current()->m_flag ) {
+							GTreeNode<T>::operator delete (node->child.current());
+						}
+					}
+				}
+
+				if ( node->m_flag ) {
+					cout << "delete obj =" << node->value << "," << node << endl;
+					Object::operator delete(node);
+				}
+			}
+		
+		测试: 
+			在newNode()和delete中我们都故意加了cout语句进行打印
+			用"testTree_3()"进行测试,程序中是删除了"D"节点.
+			运行结果:
+				new obj =0x1d6fc0				// B
+				new obj =0x1d7008				// C
+				new obj =0x1d7050				// D
+				new obj =0x1d7098				// E
+				new obj =0x1d70e0				// F
+				new obj =0x1d7128				// K
+				new obj =0x1d7170				// L
+				new obj =0x1d71b8				// G
+				new obj =0x1d7200				// H
+				new obj =0x1d7248				// I
+				new obj =0x1d7290				// J
+				new obj =0x1d72d8				// M
+				start traverse...
+				A B C D E F G H I J K L M
+				K E B A
+				L E B A
+				F B A
+				G C A
+
+				delete obj =M,0x1d72d8
+				delete obj =H,0x1d7200
+				delete obj =I,0x1d7248
+				delete obj =J,0x1d7290
+				delete obj =D,0x1d7050
+				
+			看上面的new obj后面重新根据结果添加的注释,因为程序中A节点不是
+			通过"new"出来,所以没有A节点的obj输出,再来看 delete obj
+			的输出,显然,触发我们的重载delete操作是智能指针析构时引起,
+			看输出结果, 我们的设想实现的很好!!!
+			
+			因为我们代码中没有修改"remove()"的返回值是智能指针指向"GTreeNode<T>",所以这个
+			delete的顺序实际上还是和以前一样,从摧毁一棵树对象开始,也就是从free()函数引起的.
+			仅仅是delete调用了我们的重载的delete函数而已
+			但是这个设计思路我觉得是没问题的.如果智能指针指向"GTreeNode<T>",
+			我们这个重载代码就会发挥作用!!!
+		
+
