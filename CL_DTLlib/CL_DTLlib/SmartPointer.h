@@ -1,6 +1,8 @@
 ﻿#ifndef SMARTPOINTER_H
 #define SMARTPOINTER_H
 
+#include "Object.h"
+
 namespace DTLib
 {
 /* 智能指针,只能用来指向堆空间中的单个对象或者对象
@@ -10,7 +12,7 @@ namespace DTLib
  * 3>杜绝指针运算和指针比较,如:p++
  */
 template<typename T>
-class SmartPointer
+class SmartPointer : public Object
 {
 protected:
 	T* m_pointer;	/* 智能指针的值,也就是所用空间的地址 */

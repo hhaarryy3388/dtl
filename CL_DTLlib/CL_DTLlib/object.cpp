@@ -1,24 +1,31 @@
 #include "object.h"
-#include <cstdlib>
-namespace DTLib {
+#include <cstdio>
+#include <iostream>
+using namespace std;
 
-void* Object::operator new (unsigned int size) noexcept()
+namespace DTLib {
+// noexcept/throw()表示不会抛出异常
+void* Object::operator new (unsigned int size) noexcept
 {
-	return mallor(size);
+	//cout << "Object::operator new(): " << size << endl;
+	return malloc(size);
 }
 void Object::operator delete (void* p)
 {
+	//cout << "Object::operator delete(): " << endl;
 	free(p);
 }
-void* Object::operator new[] (unsigned int size) noexcept()
+void* Object::operator new[] (unsigned int size) noexcept
 {
-	return mallor(size);
+	//cout << "Object::operator new[](): " << size << endl;
+	return malloc(size);
 }
 void Object::operator delete[] (void* p)
 {
+	//cout << "Object::operator delete[](): " << endl;
 	free(p);
 }
-~Object::Object()
+Object::~Object()
 {
 
 }

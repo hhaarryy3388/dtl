@@ -7,16 +7,21 @@ namespace DTLib
 /* 初始化异常信息,和异常位置信息 */
 void Exception::init(const char* message, const char* file, int line)
 {
-	char lineStr[16];
 	/* strdup,在堆中新建并拷贝字符串,因为传进来的字符串不确定储存位置,所以重新拷贝一份字符串 */
+	// 视频中第26课专门讲述, 某些编译器比如glibc2.2,在函数库strdup中
+	// 不进行message空指针的判断,直接进行:strlen(),有安全隐患
 	m_message = message ? strdup(message) : nullptr;
 	if (file != nullptr) {
+		char lineStr[16];
 		//itoa(line, lineStr, 10);
 		snprintf(lineStr, 16, "%d", line );
 		m_location = new char[strlen(file)+strlen(lineStr)+2];
-		strcpy(m_location, file);
-		strcat(m_location, ":");
-		strcat(m_location, lineStr);
+		if(m_location != nullptr)
+		{
+			strcpy(m_location, file);
+			strcat(m_location, ":");
+			strcat(m_location, lineStr);
+		}
 	}
 	else {
 		m_location = nullptr;

@@ -1,6 +1,8 @@
 ﻿#ifndef EXCEPTION_H
 #define EXCEPTION_H
 
+#include "Object.h"
+
 namespace DTLib
 {
 /* 异常类
@@ -12,7 +14,7 @@ namespace DTLib
  */
 #define THROW_EXCEPTION(e,m) (throw e(m,__FILE__,__LINE__))
 /* 异常类抽象类 */
-class Exception
+class Exception : public Object
 {
 protected:
 	char* m_message;	//异常信息
@@ -122,6 +124,7 @@ public:
 
 	InvalidOperationException& operator=(const InvalidOperationException& e);
 };
+
 
 }
 #endif // EXCEPTION_H
