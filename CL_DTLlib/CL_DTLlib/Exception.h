@@ -15,8 +15,8 @@ namespace DTLib
 class Exception
 {
 protected:
-	char* m_message;
-	char* m_location;
+	char* m_message;	//异常信息
+	char* m_location;	//发生异常的位置
 	/* 初始化异常信息,和异常位置信息 */
 	void init(const char* message, const char* file, int line);
 public:

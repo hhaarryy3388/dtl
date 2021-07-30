@@ -92,7 +92,6 @@ ArithmeticException::ArithmeticException(const ArithmeticException& e) : Excepti
 ArithmeticException& ArithmeticException::operator=(const ArithmeticException& e) {
 	Exception::operator=(e);
 	//std::cout << "ArithmeticException::operator= return: " << this << std::endl;
-
 	return *this;
 }
 //-------------------------------------------------------
