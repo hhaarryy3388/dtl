@@ -2,6 +2,7 @@
 #include "SmartPointer.h"
 #include "Exception.h"
 #include "object.h"
+#include "staticlist.h"
 using namespace std;
 using namespace DTLib;
 void testObject() {
@@ -41,9 +42,39 @@ void test_object_sp_exc() {
 	delete e;
 }
 
+//测试静态线性表
+void testStaticList() {
+	StaticList<int, 5> sl;
+
+	for ( int i = 0; i < 5; i++ ) {
+		sl.insert(0, i+1);
+	}
+
+	for ( int i = 0; i < 5; i++ ) {
+		cout << sl[i] << endl;
+	}
+
+	sl[3] = 30;
+	sl[2] = 20;
+
+	for ( int i = 0; i < 5; i++ ) {
+		cout << sl[i] << endl;
+	}
+
+	try {
+		sl[5] = 50;
+	}
+	catch (Exception& e){
+		cout << e.message() << endl;
+		cout << e.location() << endl;
+	}
+
+}
+
+
 int main()
 {
-	test_object_sp_exc();
+	testStaticList();
 
 	return 0;
 }
