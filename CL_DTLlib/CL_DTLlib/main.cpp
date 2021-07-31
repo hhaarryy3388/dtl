@@ -2,7 +2,7 @@
 #include "SmartPointer.h"
 #include "Exception.h"
 #include "object.h"
-#include "staticlist.h"
+#include "StaticList.h"
 using namespace std;
 using namespace DTLib;
 void testObject() {

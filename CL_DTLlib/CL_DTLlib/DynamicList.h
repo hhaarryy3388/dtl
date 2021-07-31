@@ -1,7 +1,7 @@
 #ifndef DYNAMICLIST_H
 #define DYNAMICLIST_H
 
-#include "seqlist.h"
+#include "SeqList.h"
 #include "Exception.h"
 
 namespace DTLib {

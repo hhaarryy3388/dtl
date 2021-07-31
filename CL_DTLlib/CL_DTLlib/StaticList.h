@@ -1,7 +1,7 @@
 #ifndef STATICLIST_H
 #define STATICLIST_H
 
-#include "seqlist.h"
+#include "SeqList.h"
 
 
 namespace DTLib
