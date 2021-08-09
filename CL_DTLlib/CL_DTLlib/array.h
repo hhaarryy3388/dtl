@@ -1,7 +1,7 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
-#include "Object.h"
+#include "object.h"
 #include "Exception.h"
 
 namespace DTLib {

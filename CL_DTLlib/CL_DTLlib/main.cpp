@@ -46,6 +46,7 @@ void test_object_sp_exc() {
 void testStaticList() {
 	StaticList<int, 5> sl;
 
+
 	for ( int i = 0; i < 5; i++ ) {
 		sl.insert(0, i+1);
 	}
@@ -74,7 +75,66 @@ void testStaticList() {
 
 int main()
 {
-	testStaticList();
+	//testStaticList();
+	int i = 5;
+	switch(i)
+	{
+		case 0:
+		case 5:
+		case 10:
+		case 35:
+		{
+			cout << "5>>case 35" << endl;
+		}
+		break;
+		case 16:
 
+		default:
+		{
+			cout << "5>>default" << endl;
+		}
+		break;
+	}
+	i = 1;
+	switch(i)
+	{
+		case 0:
+		case 5:
+		case 10:
+		case 35:
+		{
+			cout << "1>>case 35" << endl;
+		}
+		break;
+		case 16:
+
+		default:
+		{
+			cout << "1>>default" << endl;
+		}
+		break;
+	}
+	i = 16;
+	switch(i)
+	{
+		case 0:
+		case 5:
+		case 10:
+		case 35:
+		{
+			cout << "16>>case 35" << endl;
+		}
+		break;
+		case 16:
+		{
+			cout << "16>>case 16" << endl;
+		}
+		break;
+		default:
+		{
+			cout << "16>>default" << endl;
+		}
+		break;
+	}
 	return 0;
 }
