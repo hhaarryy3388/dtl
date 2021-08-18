@@ -1,7 +1,7 @@
 ﻿#ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-#include "object.h"
+#include "Object.h"
 
 namespace DTLib
 {

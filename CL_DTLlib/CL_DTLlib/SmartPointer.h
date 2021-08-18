@@ -1,7 +1,7 @@
 ﻿#ifndef SMARTPOINTER_H
 #define SMARTPOINTER_H
 
-#include "object.h"
+#include "Object.h"
 
 namespace DTLib
 {

@@ -12,11 +12,13 @@ SOURCES += \
 HEADERS += \
     SmartPointer.h \
     Exception.h \
-    object.h \
-    list.h \
     array.h \
     StaticArray.h \
     SeqList.h \
     StaticList.h \
     DynamicList.h \
-    DynamiCarray.h
+    DynamiCarray.h \
+    Object.h \
+    LinkList.h \
+    List.h \
+    StaticLinkList.h

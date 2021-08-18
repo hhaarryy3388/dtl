@@ -1,7 +1,7 @@
 #ifndef SEQLIST_H
 #define SEQLIST_H
 
-#include "list.h"
+#include "List.h"
 #include "Exception.h"
 
 namespace DTLib {
