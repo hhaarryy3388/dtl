@@ -1,7 +1,7 @@
 #ifndef DYNAMICARRAY_H
 #define DYNAMICARRAY_H
 
-#include "array.h"
+#include "Array.h"
 #include "Exception.h"
 
 namespace DTLib {

@@ -3,6 +3,12 @@
 
 #include "Pointer.h"
 
+/*
+ * 1,智能指针只能用来指向堆空间中的单个对象(变量)
+ * 2,不同类型的智能指针对象不能混合使用
+ * 3,不要使用delete释放智能指针指向的堆空间
+ */
+
 namespace DTLib
 {
 /* 智能指针,只能用来指向堆空间中的单个对象或者对象
@@ -22,59 +28,54 @@ public:
 	 * 错误:SmartPointer<Test> sp = new Test();
 	 * 正确:SmartPointer<Test> sp(new Test());
 	 */
-	explicit SmartPointer(T* p = nullptr)
-	{
-        this->m_pointer = p;
-	}
-	/* 拷贝构造函数,用智能指针给新智能指针构造赋值构造时,把老智能指针指向的值变为NULL
-	 * 保证同一个空间,只有一个智能指针
-	 */
-	SmartPointer(const SmartPointer<T>& obj)
-	{
-		m_pointer = obj.m_pointer;
-		const_cast<SmartPointer<T>&>(obj).m_pointer = nullptr;	//把const属性去掉后,将用来赋值的指针清空
-	}
-	/* 重载赋值操作符"="
-	 * 保证同一个空间,只有一个智能指针
-	 */
-	SmartPointer<T>& operator = (const SmartPointer<T>& obj)
-	{
-		/* 排除自己赋值给自己的情况 */
-		if( this != &obj )
-		{
-			delete m_pointer;		//释放自己原来指向的空间
-			m_pointer = obj.m_pointer;
-			const_cast<SmartPointer<T>&>(obj).m_pointer = nullptr;	//把const属性去掉后,将用来赋值的指针清空
-		}
-		return *this;	//返回智能指针自己的引用,可以用来连续赋值,x=y=z的情况
-	}
-	/* 重载对象的指针操作符"->" */
-	T* operator -> ()
-	{
-		return m_pointer;	//返回智能指针地址
-	}
-	/* 重载对象的指针操作符"*"
-	 * 用引用的方式返回,外部操作这个引用(实际空间别名),只能指针指向的空间,也会改变
-	 */
-	T& operator * ()
-	{
-		return *m_pointer;	//返回智能指针指向的内容
-	}
-	/* 智能指针是否为空 */
-	bool isNull()
-	{
-		return (m_pointer == nullptr);
-	}
-	/* 获取智能指针 */
-	T* get()
-	{
-		return m_pointer;	//返回智能指针地址
-	}
-	/* 析构函数,释放智能指针的空间 */
-	~SmartPointer()
-	{
-		delete m_pointer;
-	}
+//	explicit SmartPointer(T* p = nullptr);
+    SmartPointer(T* p = nullptr);
+    SmartPointer(const SmartPointer<T>& obj);
+    SmartPointer& operator=(const SmartPointer<T>& obj);
+    ~SmartPointer<T>();
 };
+/* 直接调用父类的构造函数*/
+template<typename T>
+SmartPointer<T>::SmartPointer(T* p) : Pointer<T>(p)
+{
+    //cout << "SmartPointer(T* p)" << endl;
+}
+
+/* 拷贝构造函数,用智能指针给新智能指针构造赋值构造时,把老智能指针指向的值变为NULL
+ * 保证同一个空间,只有一个智能指针
+ */
+template<typename T>
+SmartPointer<T>::SmartPointer(const SmartPointer<T>& obj) : Pointer<T>(nullptr) {
+    //cout << "SmartPointer(const SmartPointer<T>& obj)" << endl;
+
+    this->m_pointer = obj.m_pointer;
+    const_cast<SmartPointer<T>&>(obj).m_pointer = nullptr;  //把const属性去掉后,将用来赋值的指针清空
+}
+/* 重载赋值操作符"="
+ * 保证同一个空间,只有一个智能指针
+ */
+template<typename T>
+SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& obj) {
+    //cout << "SmartPointer<T>::operator=" << endl;
+    /* 排除自己赋值给自己的情况 */
+    if ( obj != this ) {
+        T* toDel = this->m_pointer;
+        this->m_pointer = obj.m_pointer;
+
+        const_cast<SmartPointer&>(obj).m_pointer = nullptr;
+
+        delete toDel;       // 最后释放,防止抛出异常爆掉
+    }
+    return *this;
+}
+
+/*  */
+template<typename T>
+SmartPointer<T>::~SmartPointer<T>() {
+    delete this->m_pointer;
+}
+
+
+
 }
 #endif // SMARTPOINTER_H

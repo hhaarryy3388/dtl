@@ -1,7 +1,7 @@
 #ifndef STATICARRAY_H
 #define STATICARRAY_H
 
-#include "array.h"
+#include "Array.h"
 
 namespace DTLib {
 

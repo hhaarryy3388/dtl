@@ -3,6 +3,9 @@
 
 #include "Object.h"
 
+
+
+
 namespace DTLib {
 
 template <typename T>
@@ -14,9 +17,9 @@ public:
     Pointer(T* p = nullptr);
     T* operator->();
     T& operator*();
-    const T* operator->() const;
+    const T* operator->() const;    //const对象的操作
     const T& operator*() const;
-    T* get() const;
+    T* get() const;                 //const对象的操作,只读,所以不用重载普通对象的
     bool isNull();
 
     // 这里不需要再来定义纯虚的析构函数来声明是一个抽象类,
@@ -43,6 +46,9 @@ const T* Pointer<T>::operator->() const {
     return m_pointer;
 }
 
+/* 重载对象的指针操作符"*"
+ * 用引用的方式返回,外部操作这个引用(实际空间别名),智能指针指向的空间,也会改变
+ */
 template <typename T>
 const T& Pointer<T>::operator*() const {
     return *m_pointer;

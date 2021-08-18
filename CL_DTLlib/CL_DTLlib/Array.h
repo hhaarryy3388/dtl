@@ -20,7 +20,7 @@ public:
 	T  operator[](int i) const;				//数组本身是const时,数组操作符号重载
 
 	T* array();
-// // // };
+};
 
 template <typename T>
 bool Array<T>::set(int i, T& e) {

@@ -12,7 +12,6 @@ SOURCES += \
 HEADERS += \
     SmartPointer.h \
     Exception.h \
-    array.h \
     StaticArray.h \
     SeqList.h \
     StaticList.h \
@@ -22,4 +21,6 @@ HEADERS += \
     LinkList.h \
     List.h \
     StaticLinkList.h \
-    Pointer.h
+    Pointer.h \
+    SharedPointer.h \
+    Array.h
