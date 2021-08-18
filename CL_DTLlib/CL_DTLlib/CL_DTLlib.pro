@@ -21,4 +21,5 @@ HEADERS += \
     Object.h \
     LinkList.h \
     List.h \
-    StaticLinkList.h
+    StaticLinkList.h \
+    Pointer.h

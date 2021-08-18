@@ -22,10 +22,11 @@ public:
 	 * 错误:SmartPointer<Test> sp = new Test();
 	 * 正确:SmartPointer<Test> sp(new Test());
 	 */
-	explicit SmartPointer(T* p = nullptr)
-	{
-        this->m_pointer = p;
-	}
+//	explicit SmartPointer(T* p = nullptr)
+//	{
+//        this->m_pointer = p;
+//	}
+    SmartPointer(T* p = nullptr);
 	/* 拷贝构造函数,用智能指针给新智能指针构造赋值构造时,把老智能指针指向的值变为NULL
 	 * 保证同一个空间,只有一个智能指针
 	 */
@@ -71,10 +72,45 @@ public:
 		return m_pointer;	//返回智能指针地址
 	}
 	/* 析构函数,释放智能指针的空间 */
-	~SmartPointer()
-	{
-		delete m_pointer;
-	}
+	~SmartPointer<T>();
 };
+
+template<typename T>
+SmartPointer<T>::SmartPointer(T* p) : Pointer<T>(p)
+{
+    //cout << "SmartPointer(T* p)" << endl;
+}
+
+template<typename T>
+SmartPointer<T>::SmartPointer(const SmartPointer<T>& obj) : Pointer<T>(nullptr) {
+    //cout << "SmartPointer(const SmartPointer<T>& obj)" << endl;
+
+    this->m_pointer = obj.m_pointer;
+    const_cast<SmartPointer<T>&>(obj).m_pointer = nullptr;
+}
+
+template<typename T>
+SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& obj) {
+    //cout << "SmartPointer<T>::operator=" << endl;
+
+    if ( obj != this ) {
+        T* toDel = this->m_pointer;
+
+        this->m_pointer = obj.m_pointer;
+
+        const_cast<SmartPointer&>(obj).m_pointer = nullptr;
+
+        delete toDel;       // 最后释放,防止抛出异常爆掉
+    }
+    return *this;
+}
+
+template<typename T>
+SmartPointer<T>::~SmartPointer<T>() {
+    delete this->m_pointer;
+}
+
+
+
 }
 #endif // SMARTPOINTER_H

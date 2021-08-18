@@ -3,6 +3,7 @@
 #include "Exception.h"
 #include "Object.h"
 #include "StaticList.h"
+#include "staticlinklist.h"
 using namespace std;
 using namespace DTLib;
 void testObject() {
@@ -72,6 +73,28 @@ void testStaticList() {
 
 }
 
+void testStaticLinkList() {
+    StaticLinkList<int, 5> ls;
+
+    for ( int i = 0; i < 5; i++ ) {
+        ls.insert(0, i+1);
+    }
+    for ( ls.move(0); !ls.end(); ls.next() ) {
+        cout << ls.current() << endl;
+    }
+
+    for ( ls.move(0); !ls.end(); ls.next() ) {
+        if (ls.current() == 3 ) {
+            ls.remove(ls.find(ls.current()));
+        }
+        cout << ls.current() << endl;
+    }
+    for ( ls.move(0); !ls.end(); ls.next() ) {
+        cout << ls.current() << endl;
+    }
+
+    ls.insert(6, 100);  //insert调用LinkList的insert,insert中的create,调用StaticLinkList中单create,所以在insert中抛出异常
+}
 
 int main()
 {

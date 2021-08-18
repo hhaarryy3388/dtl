@@ -10,6 +10,7 @@ void Exception::init(const char* message, const char* file, int line)
 	/* strdup,在堆中新建并拷贝字符串,因为传进来的字符串不确定储存位置,所以重新拷贝一份字符串 */
 	// 视频中第26课专门讲述, 某些编译器比如glibc2.2,在函数库strdup中
 	// 不进行message空指针的判断,直接进行:strlen(),有安全隐患
+    // 有些环境的strdup内部没有处理message为null的情况,所以我们这里添加判断
 	m_message = message ? strdup(message) : nullptr;
 	if (file != nullptr) {
 		char lineStr[16];

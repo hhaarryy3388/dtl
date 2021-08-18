@@ -319,8 +319,8 @@ typename LinkList<T>::Node* LinkList<T>::currentNode() {
 
 template <typename T>
 typename LinkList<T>::Node* LinkList<T>::create() {
-    //return new Node();
-    //return new LinkList<T>::Node();
+    //return new Node();    //多态,所以要指定T
+    //return new LinkList<T>::Node();//编译器不知道Node是类型还是变量
     return new typename LinkList<T>::Node();
 
 }

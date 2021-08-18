@@ -17,13 +17,13 @@ class StaticLinkList : public LinkList<T>
     struct SNode : public Node {
     public:
         void* operator new(unsigned int size, void* loc) {
-            (void)size;
+            (void)size; //防止未使用报警
             return loc;
         }
     };
 
-    char m_space[sizeof(SNode)*N];
-    int  m_used[N];
+    char m_space[sizeof(SNode)*N];  //静态链表的空间
+    int  m_used[N];                 //指定位置是否已经被使用
 
     Node* create();
     void  destroy(Node* pn);
@@ -49,7 +49,7 @@ typename LinkList<T>::Node* StaticLinkList<T,N>::create() {
         if ( m_used[i] == 0 ) {
             ret = reinterpret_cast<SNode*>(m_space) + i;//在静态分配的内存上获取地址
             ret = new(ret) SNode();     // 在指定的地址"ret"上new出一个SNode对象
-            m_used[i] = 1;
+            m_used[i] = 1;              // 标记该位置可用
             break;
         }
     }
@@ -79,7 +79,8 @@ int StaticLinkList<T,N>::capacity() {
 
 template <typename T, int N>
 StaticLinkList<T,N>::~StaticLinkList() {
-    this->clear();
+    //析构函数和构造函数不会多态调用,只会调用本类中的函数,
+    this->clear();  //调用父类的clear,但是父类中调用的clear会调用destroy,析构不会多态,所以调用当前类的虚函数,也就是子类的destroy
 }
 
 
