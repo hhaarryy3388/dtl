@@ -16,7 +16,7 @@ protected:
         T       value;
         Node*   next;
     };
-
+    //mutable:当linklist对象为const对象的时候,m_header依旧可以被改变
     mutable struct : public Object {
         char    Reserved[sizeof(T)];
         Node*   next;
@@ -69,7 +69,9 @@ LinkList<T>::LinkList() {
     m_step = 0;
     m_current = nullptr;
 }
-
+//链表操作,经常涉及到操作对象的前后,但是链表是单向的,所以操作对象的前一个的对象的地址才是关键信息
+//目标的前一个,所以操作对象为返回值的next
+//第0个也就是头,没毛病,因为操作的是next,所以返回m_header没有问题
 template <typename T>
 typename LinkList<T>::Node* LinkList<T>::position(int pos) const {
     Node* pNext;
