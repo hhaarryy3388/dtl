@@ -31,7 +31,7 @@ protected:
     Node* position(int pos) const ;         // 返回的 Node->next 指向的就是位置 pos 处的节点
 public:
     LinkList();
-
+	//必须保证linklist内的共有函数都是虚函数,因为会被circlelinklist重写,为了保证多态,所以必须父类是虚函数
     virtual bool insert(const T& e);
     virtual bool insert(int i, const T& e);
     virtual bool remove(int i);

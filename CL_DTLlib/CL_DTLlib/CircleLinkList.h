@@ -36,6 +36,7 @@ public:
 };
 
 template <typename T>
+//取余
 int   CircleLinkList<T>::mod(int i) const {
     return (this->m_length == 0) ? 0:(i % this->m_length);
 }
@@ -134,6 +135,7 @@ int CircleLinkList<T>::find(const T& e) {
 
     Node* slider = this->m_header.next;
     for (int i = 0; i < this->m_length;i++ ) {
+		//这里的value比较可能出现异常,value的类型的比较操作符可能有问题
         if (slider->value == e) {
             ret = i;
             break;
