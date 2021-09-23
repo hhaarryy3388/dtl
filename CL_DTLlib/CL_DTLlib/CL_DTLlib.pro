@@ -25,4 +25,5 @@ HEADERS += \
     SharedPointer.h \
     Array.h \
     CircleLinkList.h \
-    DualLinkList.h
+    DualLinkList.h \
+    LinuxList.h
