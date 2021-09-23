@@ -8,6 +8,19 @@
  *		2>typeof				根据变量得到变量类型GNU独有
  *		3>__builtin_prefetch	gcc内置函数,提高效率的函数
  *		4>static inline			标准c不能一起用,移植后直接改为static
+ * 用法
+ * struct Node
+ * {
+ *  struct list_head head;
+ *  int value
+ * };
+ * int main(void)
+ * {
+ *  srtuct Node l = {0};
+ *  struct list_head* list = (struct list_head*)&l
+ *  INIT_LIST_HEAD(list);
+ *  // .......
+ * }
  */
 
 // #include <linux/types.h>

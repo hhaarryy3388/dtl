@@ -98,66 +98,7 @@ void testStaticLinkList() {
 
 int main()
 {
-	//testStaticList();
-	int i = 5;
-	switch(i)
-	{
-		case 0:
-		case 5:
-		case 10:
-		case 35:
-		{
-			cout << "5>>case 35" << endl;
-		}
-		break;
-		case 16:
+    testStaticList();
 
-		default:
-		{
-			cout << "5>>default" << endl;
-		}
-		break;
-	}
-	i = 1;
-	switch(i)
-	{
-		case 0:
-		case 5:
-		case 10:
-		case 35:
-		{
-			cout << "1>>case 35" << endl;
-		}
-		break;
-		case 16:
-
-		default:
-		{
-			cout << "1>>default" << endl;
-		}
-		break;
-	}
-	i = 16;
-	switch(i)
-	{
-		case 0:
-		case 5:
-		case 10:
-		case 35:
-		{
-			cout << "16>>case 35" << endl;
-		}
-		break;
-		case 16:
-		{
-			cout << "16>>case 16" << endl;
-		}
-		break;
-		default:
-		{
-			cout << "16>>default" << endl;
-		}
-		break;
-	}
 	return 0;
 }
