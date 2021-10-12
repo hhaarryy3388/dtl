@@ -3,7 +3,8 @@
 #include "Exception.h"
 #include "Object.h"
 #include "StaticList.h"
-#include "staticlinklist.h"
+#include "StaticLinkList.h"
+#include "DualCircleList.h"
 using namespace std;
 using namespace DTLib;
 void testObject() {
@@ -95,6 +96,58 @@ void testStaticLinkList() {
 
     ls.insert(6, 100);  //insert调用LinkList的insert,insert中的create,调用StaticLinkList中单create,所以在insert中抛出异常
 }
+
+void josephus_DualCycle(int n, int s, int m) {
+	DualCycleLinkList<int> cl;
+
+	for ( int i = 0; i < n; i++ ) {
+		cl.insert(i, i+1);
+	}
+
+	cl.move(s-1, m-1);
+	while ( cl.length() > 0 ) {
+		cl.next();
+		cout << cl.current() << " ";
+
+		cl.remove(cl.find(cl.current()));
+		//cl.remove(cl.find(cl.currentNode()));
+	}
+	cout << endl;
+
+}
+void testDualCycleLinkList() {
+	josephus_DualCycle(41, 1, 3);     // 从序号1开始,序号3、6、9 依次死掉
+
+
+	DualCycleLinkList<int> cl;
+
+	for ( int i = 0; i < 10; i++ ) {
+		cl.insert(i+1);
+	}
+
+#if 0
+	while ( cl.length() > 0 ) {
+		cl.remove(cl.length()/2);
+
+		for ( int i = 0; i < cl.length(); i++ ) {
+			cout << cl.get(i) << " ";
+		}
+		cout << endl;
+	}
+#endif
+
+
+#if 1
+	cl.move(cl.length()-1);
+	for ( int i = 0; i < cl.length() * 2; i++ ) {
+		cout << cl.current() << " ";
+		cl.pre();
+	}
+	cout << endl;
+#endif
+
+}
+
 
 int main()
 {

@@ -42,10 +42,12 @@
 //({1;2;3;})的值就是3,GUN 独有语法,和逗号语句类似,有{}的作用域功能
 //不能使用typeof
 //下面的const typeof等等,是用来类型检查的
-//#define container_of(ptr, type, member) ({	\
-//	const typeof( ((type *)0)->member ) *__mptr = (ptr)	\
-//	(type *)((char *)ptr - offsetof(type,member));})
-//#define container_of(ptr, type, member) ((type *)((char *)ptr - offsetof(type,member)))
+/*
+#define container_of(ptr, type, member) ({	\
+	const typeof( ((type *)0)->member ) *__mptr = (ptr)	\
+	(type *)((char *)ptr - offsetof(type,member));})
+#define container_of(ptr, type, member) ((type *)((char *)ptr - offsetof(type,member)))
+*/
 #define container_of(ptr, type, member) (reinterpret_cast<type *>(reinterpret_cast<char *>(ptr) - offsetof(type,member)))
 #endif
 //#define prefetch(x) __builtin_prefetch(x)
